@@ -5,6 +5,7 @@ import UserController from './app/controllers/UserController';
 import SessionController from './app/controllers/SessionController';
 import authMiddleware from './app/middleware/auth';
 import { extname, resolve } from 'path';
+import FileController from './app/controllers/FileController';
 
 const routes = new Router();
 const upload = multer(multerConfig);
@@ -16,14 +17,6 @@ routes.use(authMiddleware);
 
 routes.put('/users', UserController.update);
 
-/*routes.post('/files', (req, res) => {
-  const destination = resolve(__dirname, '..', 'tmp', 'uploads');
-  console.log(destination);
-  return res.json({ ok: true });
-});*/
-
-routes.post('/files', upload.single('file'), (req, res) => {
-  return res.json({ ok: true });
-});
+routes.post('/files', upload.single('file'), FileController.store);
 
 export default routes;
