@@ -14,11 +14,13 @@ import NotificationController from './app/controllers/NotificationController';
 const routes = new Router();
 const upload = multer(multerConfig);
 
+// No authentication needed routes
 routes.post('/users', UserController.store);
 routes.post('/sessions', SessionController.store);
 
 routes.use(authMiddleware);
 
+// Authentication needed routes
 routes.put('/users', UserController.update);
 
 routes.get('/providers', ProviderController.index);
