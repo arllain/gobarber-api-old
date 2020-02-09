@@ -40,6 +40,16 @@ class AppointmentController {
     const { provider_id, date } = req.body;
 
     /**
+     * Checkes if a provider is trying to make an appointment for himself/herself
+     */
+    if (provider_id === req.userId) {
+      return res.status(401).json({
+        error:
+          'Authorization failed. A provider cannot make an appointment for himself',
+      });
+    }
+
+    /**
      * Check if user is a provider
      */
     const isProvider = await User.findOne({
@@ -84,12 +94,12 @@ class AppointmentController {
     const user = await User.findByPk(req.userId);
     const formattedDate = format(
       hourStart,
-      " 'dia' dd  'de' MMMM ', às'  H:mm'h' ",
+      "'dia' dd 'de' MMMM', às' H:mm'h' ",
       { locale: ptBR }
     );
 
     await Notification.create({
-      content: `Novo agendamento de ${user.name} para ${formattedDate}  `,
+      content: `Novo agendamento de ${user.name} para o ${formattedDate}`,
       user: provider_id,
     });
 
